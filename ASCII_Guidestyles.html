@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Values</title>
+</head>
+<body>
+    <h1>1. Emojis in HTML</h1>
+    <p>Direct Emoji Example: 😊 😊 😊 😊 😊 😊 😊 😊</p>
+    <p>Another Emoji: ❤️</p>
+    <p>Using Unicode Entity: <b><i>& #128512;</i></b> --> 😁</p>
+    <p>We 😊 HTML 😁 & CSS!</p>
+    <h1>2. ASCII Values Table</h1>
+    <table border="1">
+        <tr>
+            <th>Character</th>
+            <th>ASCII Value</th>
+        </tr>
+        <tr>
+            <th>A</th>
+            <th>65</th>
+        </tr>
+        <tr>
+            <th>a</th>
+            <th>97</th>
+        </tr>
+        <tr>
+            <th>0</th>
+            <th>48</th>
+        </tr>
+        <tr>
+            <th>@</th>
+            <th>64</th>
+        </tr>
+        <tr>
+            <th>Space</th>
+            <th>32</th>
+        </tr>
+        <tr>
+            <th>$</th>
+            <th>36</th>
+        </tr>
+    </table>
+
+    <h1>3. URL Encoding Visualization</h1>
+    <p><b>Before Encoding:</b></p>
+    <p>https://example.com/search?query=Madhav Gautam&email=madhav@gmail.com</p>
+
+    <p><b>After Encoding:</b></p>
+    <p> https://example.com/search?query=Madhav%20Gautam&email=madhav%40gmail.com</p>
+
+    <p>Some common encoded characters:</p>
+    <ul>
+        <li>Space  -->  %20</li>
+        <li>&  -->  %26</li>
+        <li>=  -->  %3D</li>
+        <li>?  -->  %3F</li>
+    </ul>
+
+    <h1>4. Guide Style</h1>
+    <p><b>❌Messy HTML:</b></p>
+    &lt;DIV&gt;&lt;IMG src=cat.jpg&gt;&lt;h1&gt;Welcome&lt;/H1&gt;&lt;/DIV&gt;
+
+    <p><b>✅Fixed HTML (Guide Style):</b></p>
+    <code>
+        &lt;div&gt;<br>
+        &nbsp; &lt;img src="cat.jpg" alt="cute cat" /&gt;<br>
+        &nbsp; &lt;h1&gt;Welcome&lt;/h1&gt;<br>
+        &lt;/div&gt;
+    </code>
+
+</body>
+</html>
