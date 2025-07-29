@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Career Advisor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/openai@4.0.0/browser/openai.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+    .card {
+      backdrop-filter: blur(16px) saturate(180%);
+      background-color: rgba(255, 255, 255, 0.85);
+      border-radius: 12px;
+      border: 1px solid rgba(209, 213, 219, 0.3);
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .progress-bar {
+      height: 4px;
+      transition: width 0.3s ease;
+    }
+    .floating {  
+      animation-name: floating;
+      animation-duration: 3s;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+    @keyframes floating {
+      0% { transform: translate(0, 0px); }
+      50% { transform: translate(0, 10px); }
+      100% { transform: translate(0, -0px); }
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="py-10 px-4">
+  <div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <header class="text-center mb-12 fade-in">
+      <div class="floating inline-block">
+        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7b71d602-c034-4d28-871c-9c0866a84efc.png" alt="AI Career Advisor logo with graduation cap and digital circuit design" class="w-24 h-24 mx-auto mb-4 object-cover rounded-full">
+      </div>
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">AI Career Advisor</h1>
+      <p class="text-lg text-gray-600">Discover your perfect career path tailored just for you</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="card p-6 md:p-8 shadow-xl">
+      <!-- Questionnaire Step 1 -->
+      <div id="step-1" class="question-step active">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Let's get to know you better</h2>
+        
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-500">Progress</span>
+            <span class="text-sm font-medium text-gray-500">1/6</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="progress-bar gradient-bg h-2 rounded-full" style="width: 16.66%"></div>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <label for="skills" class="block text-lg font-medium text-gray-700 mb-2">What are your current technical skills?</label>
+            <textarea id="skills" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" rows="3" placeholder="e.g. Python basics, HTML/CSS, data analysis..."></textarea>
+          </div>
+
+          <div class="flex justify-end">
+            <button onclick="nextStep(1)" class="gradient-bg text-white font-medium py-2 px-6 rounded-lg hover:opacity-90 transition">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Questionnaire Step 2 -->
+      <div id="step-2" class="question-step hidden">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Discover your interests</h2>
+        
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-500">Progress</span>
+            <span class="text-sm font-medium text-gray-500">2/6</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="progress-bar gradient-bg h-2 rounded-full" style="width: 33.33%"></div>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <label for="interests" class="block text-lg font-medium text-gray-700 mb-2">What are you interested in?</label>
+            <input type="text" id="interests" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. Artificial Intelligence, Web Development, Robotics...">
+          </div>
+
+          <div class="flex justify-between">
+            <button onclick="prevStep(2)" class="text-gray-600 font-medium py-2 px-6 rounded-lg border border-gray-300 hover:bg-gray-50 transition">Back</button>
+            <button onclick="nextStep(2)" class="gradient-bg text-white font-medium py-2 px-6 rounded-lg hover:opacity-90 transition">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Questionnaire Step 3 -->
+      <div id="step-3" class="question-step hidden">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Work style preferences</h2>
+        
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-500">Progress</span>
+            <span class="text-sm font-medium text-gray-500">3/6</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="progress-bar gradient-bg h-2 rounded-full" style="width: 50%"></div>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <label class="block text-lg font-medium text-gray-700 mb-2">Do you prefer creative or logical work?</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <button onclick="selectOption('preference', 'creative')" class="option-btn p-4 border border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition">
+                <div class="flex items-center">
+                  <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d66aa0dc-ee4f-42ae-aa35-caf2ea7a4ef2.png" alt="Paint palette symbolizing creative work" class="w-10 h-10 mr-3">
+                  <span>Creative</span>
+                </div>
+              </button>
+              <button onclick="selectOption('preference', 'logical')" class="option-btn p-4 border border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition">
+                <div class="flex items-center">
+                  <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b773a820-bfc4-4476-8b87-dbd6c1365267.png" alt="Binary code symbolizing logical work" class="w-10 h-10 mr-3">
+                  <span>Logical</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-between">
+            <button onclick="prevStep(3)" class="text-gray-600 font-medium py-2 px-6 rounded-lg border border-gray-300 hover:bg-gray-50 transition">Back</button>
+            <button onclick="nextStep(3)" class="gradient-bg text-white font-medium py-2 px-6 rounded-lg hover:opacity-90 transition">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Questionnaire Step 4 -->
+      <div id="step-4" class="question-step hidden">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Collaboration preference</h2>
+        
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-500">Progress</span>
+            <span class="text-sm font-medium text-gray-500">4/6</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="progress-bar gradient-bg h-2 rounded-full" style="width: 66.66%"></div>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <label class="block text-lg font-medium text-gray-700 mb-2">Do you want to work in teams or solo?</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <button onclick="selectOption('team', 'team')" class="option-btn p-4 border border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition">
+                <div class="flex items-center">
+                  <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4f7be270-ced7-4503-9b2d-84c59ca6c6cb.png" alt="Group of people symbolizing teamwork" class="w-10 h-10 mr-3">
+                  <span>Team</span>
+                </div>
+              </button>
+              <button onclick="selectOption('team', 'solo')" class="option-btn p-4 border border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition">
+                <div class="flex items-center">
+                  <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7ab39318-e4b2-4310-a3f6-e07571bfcafd.png" alt="Single person symbolizing independent work" class="w-10 h-10 mr-3">
+                  <span>Solo</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-between">
+            <button onclick="prevStep(4)" class="text-gray-600 font-medium py-2 px-6 rounded-lg border border-gray-300 hover:bg-gray-50 transition">Back</button>
+            <button onclick="nextStep(4)" class="gradient-bg text-white font-medium py-2 px-6 rounded-lg hover:opacity-90 transition">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Questionnaire Step 5 -->
+      <div id="step-5" class="question-step hidden">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Industry curiosity</h2>
+        
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-500">Progress</span>
+            <span class="text-sm font-medium text-gray-500">5/6</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="progress-bar gradient-bg h-2 rounded-full" style="width: 83.33%"></div>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <label for="industries" class="block text-lg font-medium text-gray-700 mb-2">Any specific industries you're curious about?</label>
+            <input type="text" id="industries" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. Healthcare Tech, Fintech, Renewable Energy...">
+          </div>
+
+          <div class="flex justify-between">
+            <button onclick="prevStep(5)" class="text-gray-600 font-medium py-2 px-6 rounded-lg border border-gray-300 hover:bg-gray-50 transition">Back</button>
+            <button onclick="nextStep(5)" class="gradient-bg text-white font-medium py-2 px-6 rounded-lg hover:opacity-90 transition">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Questionnaire Step 6 -->
+      <div id="step-6" class="question-step hidden">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Your soft skills</h2>
+        
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-500">Progress</span>
+            <span class="text-sm font-medium text-gray-500">6/6</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="progress-bar gradient-bg h-2 rounded-full" style="width: 100%"></div>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div>
+            <label for="softSkills" class="block text-lg font-medium text-gray-700 mb-2">Any soft skills or hobbies you enjoy?</label>
+            <textarea id="softSkills" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" rows="3" placeholder="e.g. Public speaking, leadership, photography..."></textarea>
+          </div>
+
+          <div class="flex justify-between">
+            <button onclick="prevStep(6)" class="text-gray-600 font-medium py-2 px-6 rounded-lg border border-gray-300 hover-bg-gray-50 transition">Back</button>
+            <button onclick="submitForm()" class="gradient-bg text-white font-medium py-2 px-6 rounded-lg hover:opacity-90 transition">Get Career Advice</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div id="results" class="hidden fade-in">
+        <div class="text-center mb-8">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a189de71-068c-4440-8fe6-9e0b9d0d65ca.png" alt="Celebration fireworks with graduation cap" class="w-20 h-20 mx-auto mb-4">
+          <h2 class="text-3xl font-bold text-gray-800 mb-2">Your Personalized Career Guide</h2>
+          <p class="text-gray-600">Based on your responses, here are our recommendations</p>
+        </div>
+
+        <!-- Career Paths -->
+        <div class="card p-6 mb-6 border border-gray-200 bg-white rounded-xl shadow-sm">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5eef0f16-d9ba-4d77-a881-28d1b91432a8.png" alt="Career path icon" class="w-6 h-6 mr-2">
+            Recommended Career Paths
+          </h3>
+          <div class="space-y-4" id="career-paths">
+            <!-- Dynamically filled by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Recommended Courses -->
+        <div class="card p-6 mb-6 border border-gray-200 bg-white rounded-xl shadow-sm">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2fa16a9a-77ab-4989-8f43-7086d369bcc4.png" alt="Online course icon" class="w-6 h-6 mr-2">
+            Recommended Courses
+          </h3>
+          <div class="space-y-4" id="recommended-courses">
+            <!-- Dynamically filled by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Project Ideas -->
+        <div class="card p-6 mb-6 border border-gray-200 bg-white rounded-xl shadow-sm">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e4e1ee8b-e78d-457a-963e-3ca0423eebfc.png" alt="Project idea lightbulb icon" class="w-6 h-6 mr-2">
+            Project Ideas to Build
+          </h3>
+          <div class="space-y-4" id="project-ideas">
+            <!-- Dynamically filled by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Learning Resources -->
+        <div class="card p-6 border border-gray-200 bg-white rounded-xl shadow-sm">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9ca4c8db-5247-4a0b-a40f-36d510cd0160.png" alt="Book and resource icon" class="w-6 h-6 mr-2">
+            Free Learning Resources & Communities
+          </h3>
+          <div class="space-y-2" id="learning-resources">
+            <!-- Dynamically filled by JavaScript -->
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <button onclick="resetForm()" class="gradient-bg text-white font-medium py-2 px-8 rounded-lg hover:opacity-90 transition">Start Over</button>
+        </div>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div id="loading" class="hidden text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 mb-4"></div>
+        <p class="text-gray-600">Analyzing your responses...</p>
+      </div>
+    </main>
+
+    <footer class="text-center text-gray-500 text-sm mt-12 fade-in">
+      <p>AI Career Advisor © 2023 | Helping students find their perfect career path</p>
+    </footer>
+  </div>
+
+  <script>
+    // Form data object
+    const formData = {
+      skills: '',
+      interests: '',
+      preference: '',
+      team: '',
+      industries: '',
+      softSkills: ''
+    };
+
+    // Selected options tracker
+    const selectedOptions = {
+      preference: null,
+      team: null
+    };
+
+    // OpenAI API integration
+    const getCareerRecommendations = async (data) => {
+      const openai = new OpenAI({
+        apiKey: 'YOUR_API_KEY', // Replace with your actual API key
+        dangerouslyAllowBrowser: true // Only for frontend demos
+      });
+
+      try {
+        const prompt = `Based on these student details:
+        Skills: ${data.skills}
+        Interests: ${data.interests}
+        Work Preference: ${data.preference}
+        Team Preference: ${data.team}
+        Industries: ${data.industries}
+        Soft Skills: ${data.softSkills}
+
+        Please provide:
+        1. 2-3 suitable career paths with explanations
+        2. 3 recommended courses (include platform names)
+        3. 2 project ideas they can build
+        4. List of free learning resources
+        
+        Format as JSON with these keys: careerPaths, courses, projects, resources`;
+
+        const response = await openai.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.7,
+        });
+
+        const recommendations = JSON.parse(response.choices[0].message.content);
+        careerPaths: [
+          {
+            title: "Full Stack Developer",
+            description: `With your skills in ${data.skills || 'technology'} and interest in ${data.interests || 'digital solutions'}, this role allows you to work on both front-end and back-end development. Great for ${careerFocus}.`
+          },
+          {
+            title: "Data Scientist",
+            description: `Your potential for ${data.preference === 'logical' ? 'logical problem-solving' : 'creative data visualization'} makes this a strong option. Combines ${data.interests || 'analysis'} with technical skills.`
+          },
+          {
+            title: "UX/UI Designer",
+            description: `Perfect blend for ${data.preference === 'creative' ? 'creativity' : 'systematic thinking'} applied to user experiences. Your ${data.softSkills || 'soft skills'} would be valuable here.`
+          }
+        ],
+        courses: [
+          {
+            title: "Introduction to Computer Science",
+            platform: "edX (Harvard CS50)",
+            link: "https://www.edx.org/course/cs50s-introduction-to-computer-science",
+            free: true
+          },
+          {
+            title: "The Web Developer Bootcamp 2023",
+            platform: "Udemy",
+            link: "https://www.udemy.com/course/the-web-developer-bootcamp/",
+            free: false
+          },
+          {
+            title: "Machine Learning Crash Course",
+            platform: "Google Developers",
+            link: "https://developers.google.com/machine-learning/crash-course",
+            free: true
+          }
+        ],
+        projects: [
+          {
+            title: "Build a Personal Portfolio Website",
+            description: "Showcase your skills and projects in a responsive website using HTML, CSS, and JavaScript."
+          },
+          {
+            title: "Create a Small Data Analysis Project",
+            description: `Analyze ${data.interests ? data.interests.toLowerCase() : 'a topic'} you're interested in using Python and visualize the results.`
+          }
+        ],
+        resources: [
+          {
+            title: "freeCodeCamp",
+            description: "Free coding challenges and projects",
+            link: "https://www.freecodecamp.org/"
+          },
+          {
+            title: "DEV Community",
+            description: "Software developers sharing knowledge",
+            link: "https://dev.to/"
+          },
+          {
+            title: "GitHub Student Pack",
+            description: "Free tools and services for students",
+            link: "https://education.github.com/pack"
+          }
+        ]
+      };
+
+      // Customize based on industries mentioned
+      if (data.industries.toLowerCase().includes('health')) {
+        recommendations.careerPaths.push({
+          title: "Health Technology Specialist",
+          description: "Combine healthcare knowledge with technology skills to improve medical systems and patient care."
+        });
+        recommendations.courses.push({
+          title: "Health Informatics on Coursera",
+          platform: "Coursera",
+          link: "https://www.coursera.org/learn/health-informatics",
+          free: true
+        });
+      }
+
+      if (data.industries.toLowerCase().includes('fin')) {
+        recommendations.careerPaths.push({
+          title: "Fintech Developer",
+          description: "Work at the intersection of finance and technology to create innovative financial solutions."
+        });
+      }
+
+      return recommendations;
+    };
+
+    // DOM Navigation Functions
+    function showStep(stepNumber) {
+      document.querySelectorAll('.question-step').forEach(step => {
+        step.classList.add('hidden');
+      });
+      document.getElementById(`step-${stepNumber}`).classList.remove('hidden');
+    }
+
+    function nextStep(currentStep) {
+      // Validate and store current step data
+      if (currentStep === 1) {
+        formData.skills = document.getElementById('skills').value;
+        if (!formData.skills) {
+          alert('Please tell us about your skills');
+          return;
+        }
+      } else if (currentStep === 2) {
+        formData.interests = document.getElementById('interests').value;
+        if (!formData.interests) {
+          alert('Please share your interests');
+          return;
+        }
+      } else if (currentStep === 5) {
+        formData.industries = document.getElementById('industries').value;
+      } else if (currentStep === 6) {
+        formData.softSkills = document.getElementById('softSkills').value;
+      }
+
+      if (currentStep < 6) {
+        showStep(currentStep + 1);
+      }
+    }
+
+    function prevStep(currentStep) {
+      showStep(currentStep - 1);
+    }
+
+    function selectOption(field, value) {
+      selectedOptions[field] = value;
+      formData[field] = value;
+      
+      // Update UI
+      document.querySelectorAll(`.option-btn`).forEach(btn => {
+        btn.classList.remove('border-indigo-500', 'bg-indigo-50');
+      });
+      event.target.classList.add('border-indigo-500', 'bg-indigo-50');
+    }
+
+    async function submitForm() {
+      // Get final form data
+      formData.softSkills = document.getElementById('softSkills').value;
+
+      // Show loading
+      document.querySelectorAll('.question-step').forEach(step => {
+        step.classList.add('hidden');
+      });
+      document.getElementById('loading').classList.remove('hidden');
+
+      try {
+        const recommendations = await getCareerRecommendations(formData);
+        displayResults(recommendations);
+      } catch (error) {
+        console.error("API Error:", error);
+        document.getElementById('loading').classList.add('hidden');
+        alert("Error getting recommendations. Please try again.");
+      }
+    }
+
+    function displayResults(recommendations) {
+      document.getElementById('loading').classList.add('hidden');
+      
+      // Display Career Paths
+      const careerPathsContainer = document.getElementById('career-paths');
+      careerPathsContainer.innerHTML = '';
+      recommendations.careerPaths.forEach(path => {
+        careerPathsContainer.innerHTML += `
+          <div class="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border-l-4 border-indigo-500">
+            <h4 class="font-bold text-lg text-gray-800">${path.title}</h4>
+            <p class="text-gray-600">${path.description}</p>
+          </div>
+        `;
+      });
+
+      // Display Courses
+      const coursesContainer = document.getElementById('recommended-courses');
+      coursesContainer.innerHTML = '';
+      recommendations.courses.forEach(course => {
+        coursesContainer.innerHTML += `
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="font-semibold text-gray-800">${course.title}</h4>
+              <p class="text-gray-600 text-sm">${course.platform} ${course.free ? '(Free)' : '(Paid)'}</p>
+            </div>
+            <a href="${course.link}" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Visit →</a>
+          </div>
+        `;
+      });
+
+      // Display Project Ideas
+      const projectsContainer = document.getElementById('project-ideas');
+      projectsContainer.innerHTML = '';
+      recommendations.projects.forEach(project => {
+        projectsContainer.innerHTML += `
+          <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-purple-500">
+            <h4 class="font-semibold text-gray-800">${project.title}</h4>
+            <p class="text-gray-600">${project.description}</p>
+          </div>
+        `;
+      });
+
+      // Display Learning Resources
+      const resourcesContainer = document.getElementById('learning-resources');
+      resourcesContainer.innerHTML = '';
+      recommendations.resources.forEach(resource => {
+        resourcesContainer.innerHTML += `
+          <div class="flex justify-between items-start py-2 border-b border-gray-200 last:border-0">
+            <div>
+              <h4 class="font-semibold text-gray-800">${resource.title}</h4>
+              <p class="text-gray-600 text-sm">${resource.description}</p>
+            </div>
+            <a href="${resource.link}" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">Visit →</a>
+          </div>
+        `;
+      });
+
+      // Show results
+      document.getElementById('results').classList.remove('hidden');
+    }
+
+    function resetForm() {
+      // Reset form data
+      for (const key in formData) {
+        formData[key] = '';
+      }
+      
+      // Reset selected options
+      for (const key in selectedOptions) {
+        selectedOptions[key] = null;
+      }
+      
+      // Reset UI
+      document.getElementById('skills').value = '';
+      document.getElementById('interests').value = '';
+      document.getElementById('industries').value = '';
+      document.getElementById('softSkills').value = '';
+      
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.classList.remove('border-indigo-500', 'bg-indigo-50');
+      });
+      
+      document.getElementById('results').classList.add('hidden');
+      showStep(1);
+    }
+  </script>
+</body>
+</html>
