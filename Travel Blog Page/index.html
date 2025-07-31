@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Travel Blog Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon2.jpg" type="image/Travel">
+    <audio autoplay loop>
+        <source src="roa-music-walk-around(chosic.com).mp3" type="audio/mp3">
+    </audio>
+</head>
+<header>
+        <h1>My Travel Blog</h1>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#blog">Blog</a>
+            <a href="#destination">Destination</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+<body>
+    <main>
+        <section id="blog">
+            <h2>Blog Introduction</h2>
+            <img src="ladakh1.jpeg" alt="Ladakh_Scenery" height="400" width="100%">
+            <p>Ladakh is a beautiful and peaceful place in the mountains of northern India. It’s known for its clear blue skies, quiet valleys, and tall snow-covered hills. You can visit calm lakes like Pangong Lake, see old and colorful monasteries, and enjoy long drives on high roads like Khardung La Pass. The town of Leh is a great place to learn about local culture and enjoy tasty food. Ladakh is perfect for people who love nature, adventure, and peaceful places. A trip here feels like a breath of fresh air far away from busy city life.</p>
+        </section>
+
+        <section id="destination">
+            <h2>Top 3 Travel Destinations</h2>
+            <table border="1">
+                <tr>
+                    <th>Rank</th>
+                    <th>Destination</th>
+                    <th>Country</th>
+                    <th>Best Time To Visit</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Ladakh</td>
+                    <td>India</td>
+                    <td>May to September</t>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Bali</td>
+                    <td>Indonesia</td>
+                    <td>April to October</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Paris</td>
+                    <td>France</td>
+                    <td>April to June, September</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="quote">
+            <h2>A Travel Quote</h2>
+            <blockquote>
+                "Travel isn’t always pretty. It isn’t always comfortable. Sometimes it hurts, it even breaks your heart. But that’s okay. The journey changes you – it should change you." <br>- Anthony Bourdain
+            </blockquote>
+        </section>
+
+        <section id="gallery">
+            <h2>Gallery</h2>
+            <video width="500" height="300" controls autoplay loop>
+            <source src="footage.webm" type="video/mp4">
+            </video>
+        </section>
+
+
+<br><br>
+        <footer>
+            <section id="contact">
+                <div class="form-box">
+                    <h2>Travel Form</h2>
+                    <form>
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required><br><br>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required><br><br>
+                        <label for="destination">Select your destination:</label>
+                        <select id="destination" name="favdest" required>
+                            <option>Ladakh</option>
+                            <option>Bali</option>
+                            <option>Paris</option>
+                            <option>Tokyo</option>
+                            <option>Thailand</option>
+                            <option>Spain</option>
+                        </select><br><br>
+                        <button type="submit">Submit</button>
+
+                    </form>
+                </div>
+            </section>
+        </footer>
+
+    </main>
+</body>
+</html>
