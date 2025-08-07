@@ -1,0 +1,40 @@
+.container{
+    display: flex;
+    padding: 60px;
+}
+
+
+.box{
+    display: flex;
+    background-color: aqua;
+    color: black;
+    padding: 40px;
+    border: 2px solid black;
+    transition: all;
+    transition-duration: 2s;
+    transition-delay: 1s;
+}
+
+.box:hover{
+    background-color: blueviolet;
+    color: white;
+    font-size: large;
+    transition-duration: 2s;
+    transition-timing-function: steps(5);
+    transition: all;
+    transition-property: all;
+    transition-delay: 0s;
+    transform: rotate(45deg);
+    rotate: x 90deg;
+    /* rotate: y 90deg; */
+    /* transform: scale(2); */
+    /* transform: scale(2,1); */
+    motion-rotation: reverse;
+
+    
+}
+
+.box:active{
+    background-color: chartreuse;
+    color: red;
+}
