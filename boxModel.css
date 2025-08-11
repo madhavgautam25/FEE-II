@@ -1,0 +1,28 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+    box-sizing: border-box;
+    background-color:aliceblue
+}
+
+.box{
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-right: 40px;
+    padding-left: 40px;
+
+    background-color: aquamarine;
+    text-align: center;
+
+    border-top: 5px solid red;
+    border-bottom: 5px dashed blue;
+    border-left: 5px dotted green;
+    border-right: 10px double brown;
+
+    margin-top:30px;
+    margin-left: 400px;
+    margin-right: 400px;
+    margin-bottom: 70px;
+
+}
