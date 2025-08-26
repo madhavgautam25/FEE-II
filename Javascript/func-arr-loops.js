@@ -37,7 +37,15 @@ console.log("Is 7 prime?", isPrime(7));
 // 4. Array Rotation
 function rotateArray(arr, k) {
   k = k % arr.length;
-  return arr.slice(k).concat(arr.slice(0, k));
+  let rotated = [];
+
+  for (let i = k; i < arr.length; i++) {
+    rotated.push(arr[i]);
+  }
+  for (let i = 0; i < k; i++) {
+    rotated.push(arr[i]);
+  }
+  return rotated;
 }
 console.log("Rotate [1,2,3,4,5] by 2:", rotateArray([1, 2, 3, 4, 5], 2));
 
