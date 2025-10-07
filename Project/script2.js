@@ -12,8 +12,10 @@ function getProducts(){
         data.forEach((p) => {
             const li = document.createElement("li");
             li.innerHTML = `${p.title} (${p.category}) ------ $${p.price}
-            <button onclick="updateProduct(${p.id})">Update</button>
-            <button onclick="deleteProduct(${p.id})">Delete</button>
+            <div class="buttons">
+                <button onclick="updateProduct(${p.id})">Update</button>
+                <button onclick="deleteProduct(${p.id})">Delete</button>
+            </div>
             `
             pdt_list.appendChild(li)
         });
