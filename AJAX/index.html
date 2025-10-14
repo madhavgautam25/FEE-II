@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+</head>
+<script>
+    function handleContent(){
+        let request = new XMLHttpRequest();
+        request.open('GET', 'db.json');
+        request.onreadystatechange = function(){
+            if(request.readyState === 4 && request.status === 200){
+
+                console.log(request.responseText);
+                let data = JSON.parse(request.responseText);
+                console.log(data);
+                let html = "";
+                data.products.forEach(function(product){
+                    html += `<div>
+                        <h2>${product.title}</h2>
+                        <p>Category: ${product.category}</p>
+                        <p>Price: ${product.price}</p>
+                        <p>Description: ${product.description}</p>
+                    </div>`;
+                });
+                document.getElementById('contentArea').innerHTML = html;
+
+            }
+        };
+        request.send();
+    }
+</script>
+<body>
+    <h1>Welcome to the Home Page</h1>
+    <h2>This is the main page of the AJAX example.</h2>
+    <h2><a href="about.html">Go to About Page</a></h2>
+
+    <button onclick="handleContent()">Show Products</button>
+
+    <div id="contentArea">
+        <p>Products will be shown here.</p>
+    </div>
+
+</body>
+</html>
