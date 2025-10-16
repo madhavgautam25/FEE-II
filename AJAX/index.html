@@ -30,17 +30,22 @@
         };
         request.send();
     }
+    function hideContent(){
+        document.getElementById('contentArea').innerHTML = "";
+    }
 </script>
 <body>
     <h1>Welcome to the Home Page</h1>
     <h2>This is the main page of the AJAX example.</h2>
     <h2><a href="about.html">Go to About Page</a></h2>
 
-    <button onclick="handleContent()">Show Products</button>
+    <button onclick="handleContent()">Show Products</button>  <button onclick="hideContent()">Hide Products</button>
 
     <div id="contentArea">
         <p>Products will be shown here.</p>
+
     </div>
+    <br>
 
 </body>
 </html>
